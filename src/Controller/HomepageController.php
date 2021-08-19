@@ -9,7 +9,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class HomepageController extends AbstractController
 {
-    #[Route('', name: 'homepage')]
+    /**
+     * @Route("/", name="homepage", methods={"GET"})
+     */
     public function index(Request $request): Response
     {
         return $this->render('homepage/index.html.twig', [
