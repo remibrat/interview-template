@@ -29,7 +29,11 @@
                         {% endif %}
                         
                     </div>
-                    <a class="post-msg" href="{{ post.getUrl() }}">{{ post.getMessage() }} <small><i class="opacity">({{ post.getSourceUrl(post.getUrl()) }})</i></small></a>
+                    <a class="post-msg" href="{{ post.getUrl() }}">{{ post.getMessage() }} 
+                        {% if post.getSourceUrl(post.getUrl()) != "" %}
+                            <small><i class="opacity">({{ post.getSourceUrl(post.getUrl()) }})</i></small>
+                        {% endif %}
+                    </a>
                 </div>
             </div>
         </div>
