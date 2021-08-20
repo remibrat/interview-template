@@ -160,6 +160,7 @@ class Post
         return $totalVotes;
     }
 
+    public function 
 
     public function getCreatedAt(): ?\DateTime
     {
