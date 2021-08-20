@@ -19,9 +19,20 @@ class PostRepository extends ServiceEntityRepository
         parent::__construct($registry, Post::class);
     }
 
-    public function findAll()
+    public function findAllSorted()
     {
         return $this->findBy([], ['created_at' => 'DESC']);
+    }
+
+    public function findByVotes($sort) {
+        return $this->createQueryBuilder('p')
+        ->innerJoin('App\Entity\UserVote', 'uv', 'uv.post = p.id')
+        ->groupBy('p.id')
+        ->addSelect('SUM(uv.value) AS HIDDEN total_votes')
+        ->orderBy('total_votes', $sort)
+        ->getQuery()
+        ->getResult()
+        ;
     }
 
     // /**
