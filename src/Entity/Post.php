@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\PostRepository;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
@@ -17,6 +19,7 @@ class Post
     public function __construct()
     {
         $this->setCreatedAt(new \DateTime('now'));
+        $this->userVotes = new ArrayCollection();
     }
 
     /**
@@ -42,11 +45,6 @@ class Post
     private $message;
 
     /**
-     * @ORM\Column(type="integer", options={"default": 0})
-     */
-    private $votes;
-
-    /**
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $created_at;
@@ -56,6 +54,11 @@ class Post
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;
+
+    /**
+     * @ORM\OneToMany(targetEntity=UserVote::class, mappedBy="post", orphanRemoval=true)
+     */
+    private $userVotes;
 
     /**
      * @ORM\PrePersist
@@ -144,15 +147,16 @@ class Post
 
     public function getVotes(): ?int
     {
-        return $this->votes;
+        $userVotes = $this->getUserVotes();
+        $totalVotes = 0;
+
+        foreach ($userVotes as $userVote) {
+            $totalVotes += $userVote->getValue();
+        }
+        
+        return $totalVotes;
     }
 
-    public function setVotes(int $votes): self
-    {
-        $this->votes = $votes;
-
-        return $this;
-    }
 
     public function getCreatedAt(): ?\DateTime
     {
@@ -174,6 +178,36 @@ class Post
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|UserVote[]
+     */
+    public function getUserVotes(): Collection
+    {
+        return $this->userVotes;
+    }
+
+    public function addUserVote(UserVote $userVote): self
+    {
+        if (!$this->userVotes->contains($userVote)) {
+            $this->userVotes[] = $userVote;
+            $userVote->setPost($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserVote(UserVote $userVote): self
+    {
+        if ($this->userVotes->removeElement($userVote)) {
+            // set the owning side to null (unless already changed)
+            if ($userVote->getPost() === $this) {
+                $userVote->setPost(null);
+            }
+        }
 
         return $this;
     }
