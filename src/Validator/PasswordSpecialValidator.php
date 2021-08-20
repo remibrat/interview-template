@@ -18,6 +18,7 @@ class PasswordSpecialValidator extends ConstraintValidator
         if (null === $pwd || '' === $pwd)
             return;
         
+        // check if pwd contains special character(s)
         $no_special = preg_match('/(?=.*[!@#$%^&*.,:=?;+])/', $pwd) == false;
 
         if ($no_special)

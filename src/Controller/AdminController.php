@@ -20,10 +20,12 @@ class AdminController extends AbstractController
      */
     public function index(Request $request, PostRepository $postRepository): Response
     {
+        // get value of the template's select
         $sort = $request->query->get('sort') ?? "date";
 
         if ($sort == "votes") {
             $posts = $postRepository->findAll();
+            // sort posts by vote score
             usort($posts, function($post1, $post2) {
                 $userVotes1 = $post1->getUserVotes();
                 $userVotes2 = $post2->getUserVotes();
@@ -36,8 +38,10 @@ class AdminController extends AbstractController
                 }
                 return ($totalVotes1 < $totalVotes2) ? -1 : 1;
             });
+            // reverse the array to be sorted by DESC
             $posts = array_reverse($posts);
         } else {
+            // sort by created_at date
             $posts = $postRepository->findBy([], ['created_at' => 'DESC']);
         }
 

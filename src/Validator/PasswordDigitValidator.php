@@ -18,6 +18,7 @@ class PasswordDigitValidator extends ConstraintValidator
         if (null === $pwd || '' === $pwd)
             return;
         
+        // check if pwd have numerical value
         $no_digit = preg_match('/(?=.*\d)/', $pwd) == false;
 
         if ($no_digit)

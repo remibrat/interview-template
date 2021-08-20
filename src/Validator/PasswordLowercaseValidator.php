@@ -19,6 +19,7 @@ class PasswordLowercaseValidator extends ConstraintValidator
         if (null === $pwd || '' === $pwd)
             return;
         
+        // check if pwd contains lowercase letter(s)
         $no_lowercase = preg_match('/(?=.*[a-z])/', $pwd) == false;
 
         if ($no_lowercase)

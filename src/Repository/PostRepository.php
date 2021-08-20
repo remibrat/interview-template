@@ -24,6 +24,8 @@ class PostRepository extends ServiceEntityRepository
         return $this->findBy([], ['created_at' => 'DESC']);
     }
 
+    // get posts sorted by vote score
+    // doesn't work
     public function findByVotes($sort) {
         return $this->createQueryBuilder('p')
         ->innerJoin('App\Entity\UserVote', 'uv', 'uv.post = p.id')

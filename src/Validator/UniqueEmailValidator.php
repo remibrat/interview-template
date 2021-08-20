@@ -31,8 +31,9 @@ class UniqueEmailValidator extends ConstraintValidator
             return;
         
 
+        // get user with given email
         $users = $this->userRepository->findBy(array('email' => $email));
-
+        // check if this email is already taken by an other user
         $email_exists = !empty($users) && !( sizeof($users) == 1 && $users[0]->getId() == $this->context->getRoot()->getData()->getId() );
         
         if ($email_exists)

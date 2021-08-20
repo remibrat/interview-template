@@ -21,6 +21,7 @@ class UserVoteRepository extends ServiceEntityRepository
         parent::__construct($registry, UserVote::class);
     }
 
+    // check if user has already voted for this post with this value
     public function userVoted(User $user, Post $post, $value): bool
     {
         $userVoteForPost = $this->findBy(['user' => $user, 'post' => $post, 'value' => $value]);

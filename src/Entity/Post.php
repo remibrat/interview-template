@@ -75,21 +75,27 @@ class Post
     {
         $diff = $this->getCreatedAt()->diff(new \DateTime());
 
+        // y : years
         if($diff->y) {
             $value = $diff->y;
             $suffix = ' year(s)';
+        // m : months
         } elseif($diff->m) {
             $value = $diff->m;
             $suffix = ' month(s)';
+        // d : days
         } elseif($diff->d) {
             $value = $diff->d;
             $suffix = ' day(s)';
+        // h : hours
         } elseif($diff->h) {
             $value = $diff->h;
             $suffix = ' hour(s)';
+        // i : minutes
         } elseif($diff->i) {
             $value = $diff->i;
             $suffix = ' min';
+        // s : secondes
         } elseif($diff->s) {
             $value = $diff->s;
             $suffix = ' sec';
@@ -133,6 +139,7 @@ class Post
     public function getSourceUrl($url): string
     {
         if (!is_null($url)) {
+            // get website url without any routes or parameters
             preg_match('@^(http[s]?:\/\/)?([^\/\s]+)(.*)@i', $this->getUrl(), $matches);
             return $matches[2];
         } else {
@@ -158,6 +165,7 @@ class Post
         $totalVotes = 0;
 
         foreach ($userVotes as $userVote) {
+            // sum votes (1 or -1) to get the vote score
             $totalVotes += $userVote->getValue();
         }
         

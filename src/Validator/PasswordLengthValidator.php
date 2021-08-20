@@ -19,6 +19,7 @@ class PasswordLengthValidator extends ConstraintValidator
         if (null === $pwd || '' === $pwd)
             return;
 
+        // check if pwd length is superior to 8
         $too_short = strlen($pwd) < 8;
 
         if ($too_short)

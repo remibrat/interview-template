@@ -19,6 +19,7 @@ class PasswordUppercaseValidator extends ConstraintValidator
         if (null === $pwd || '' === $pwd)
             return;
         
+        // check if pwd contains uppercase letter(s)
         $no_uppercase = preg_match('/(?=.*[A-Z])/', $pwd) == false;
 
         if ($no_uppercase)

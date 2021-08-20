@@ -77,6 +77,7 @@ class UserVote
 
     public function transformValueToInt(string $value): int
     {
+        // upvote value is 1 and downvote value is -1
         if ($value == "up") {
             $result = 1;
         } else {

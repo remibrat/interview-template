@@ -23,10 +23,12 @@ class PostController extends AbstractController
      */
     public function index(Request $request, PostRepository $postRepository): Response
     {
+        // get value of the template's select
         $sort = $request->query->get('sort') ?? "date";
 
         if ($sort == "votes") {
             $posts = $postRepository->findAll();
+            // sort posts by vote score
             usort($posts, function($post1, $post2) {
                 $userVotes1 = $post1->getUserVotes();
                 $userVotes2 = $post2->getUserVotes();
@@ -39,11 +41,15 @@ class PostController extends AbstractController
                 }
                 return ($totalVotes1 < $totalVotes2) ? -1 : 1;
             });
+            // reverse the array to be sorted by DESC
             $posts = array_reverse($posts);
         } else {
+            // sort by created_at date
             $posts = $postRepository->findBy([], ['created_at' => 'DESC']);
         }
 
+        // inject userVoteRepository to twig template
+        // should be change : I should not be accessing repository within a twig template
         $userVoteRepository = $this->getDoctrine()->getManager()->getRepository(UserVote::class);
 
         return $this->render('post/index.html.twig', [
@@ -87,16 +93,19 @@ class PostController extends AbstractController
 
         $userVote = new UserVote();
         $post = $postRepository->find($post);
+        // get userVotes for this post and user
         $userVoteForPost = $userVoteRepository->findBy(['user' => $this->getUser(), 'post' => $post]);
         $entityManager = $this->getDoctrine()->getManager();
         
+        // if this user has already voted for this post with a different value
         if (!empty($userVoteForPost) && $userVoteForPost[0]->getValue() != $userVote->transformValueToInt($value)) {
-
+            // delete his older vote
             $entityManager->remove($userVoteForPost[0]);
             $entityManager->flush();
 
+        // if this user never voted for this post
         } elseif (empty($userVoteForPost)) {
-
+            // create a new userVote
             $userVote->setUser($this->getUser());
             $userVote->setPost($post);
             $userVote->setValue($value);
