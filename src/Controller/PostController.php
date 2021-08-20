@@ -2,12 +2,14 @@
 
 namespace App\Controller;
 
+use Exception;
 use App\Entity\Post;
 use App\Form\PostType;
 use App\Repository\PostRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class PostController extends AbstractController
@@ -53,5 +55,22 @@ class PostController extends AbstractController
         return $this->render('/post/new.html.twig', [
             'form' => $form->createView()
         ]);
+    }
+
+    /**
+     * @Route("/delete/{id}/{token}", name="delete", methods={"GET"})
+     * @IsGranted("ROLE_ADMIN")
+     */
+    public function delete(Post $post, $token)
+    {
+        if (!$this->isCsrfTokenValid('delete_post' . $post->getId(), $token)) {
+            throw new Exception('Invalid CSRF Token');
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($post);
+        $em->flush();
+
+        return $this->redirectToRoute('posts');
     }
 }

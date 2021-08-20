@@ -61,3 +61,8 @@ body {
     justify-content: space-between;
     align-items: center;
 }
+.post-delete {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+}

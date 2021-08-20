@@ -26,7 +26,16 @@
                     </div>
                 </div>
                 <div class="post-content">
-                    <p class="post-title">{{ post.getTitle() }} <small><i class="opacity">{{ post.getPostAge() }}</i></small></p>
+                    <div class="post-header">
+                        <p class="post-title">{{ post.getTitle() }} <small><i class="opacity">{{ post.getPostAge() }}</i></small></p>
+                        
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <a class="t-d-none post-delete" href="{{ path('delete', {id: post.id, token: csrf_token('delete_post' ~ post.id)}) }}">
+                                    <i class="fas fa-trash-alt"></i>
+                            </a>
+                        {% endif %}
+                        
+                    </div>
                     <a class="post-msg" href="{{ post.getUrl() }}">{{ post.getMessage() }} <small><i class="opacity">({{ post.getSourceUrl(post.getUrl()) }})</i></small></a>
                 </div>
             </div>

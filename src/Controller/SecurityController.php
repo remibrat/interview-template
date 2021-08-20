@@ -14,9 +14,7 @@ class SecurityController extends AbstractController
      */
     public function index(): Response
     {
-        return $this->render('security/index.html.twig', [
-            'controller_name' => 'SecurityController',
-        ]);
+        return $this->redirectToRoute('posts');
     }
 
     /**
