@@ -160,7 +160,6 @@ class Post
         return $totalVotes;
     }
 
-
     public function getCreatedAt(): ?\DateTime
     {
         return $this->created_at;
