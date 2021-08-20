@@ -32,6 +32,8 @@ You can now access your website on https://127.0.0.1:8000.
 
 Run this command in the terminal.
 
+- `php bin/console make:migration`
+- `php bin/console d:s:u --force`
 - `php bin/console doctrine:fixtures:load`
 
 You can now log in the website with these credentials :
