@@ -13,7 +13,7 @@ Run these commands to install the project.
 
 ```shell
 # you may change the last argument to an appropriate folder  
-git clone git@github.com:windoo/interview-template.git ~/windoo-interview
+git clone git@github.com:remibrat/interview-template.git ~/windoo-interview
 cd ~/windoo-interview
 composer install
 npm install
@@ -27,3 +27,16 @@ Run these two commands in two separated terminals.
 - `npm run watch`
 
 You can now access your website on https://127.0.0.1:8000.
+
+## Connection
+
+Run this command in the terminal.
+
+- `php bin/console doctrine:fixtures:load`
+
+You can now log in the website with these credentials :
+
+- `User  : user@dev`
+- `Admin : admin@dev`
+
+- `Password : !aTFEPHom9`

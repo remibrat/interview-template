@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello PostController!{% endblock %}
+
+{% block body %}
+    <div class="post-btn">
+        <form action="{{ path('posts') }}" method="get" class="post-sort mt-3 mb-1">
+            <select name="sort" id="sort" class="browser-default form-control" onchange="this.form.submit()">
+                <option value="date">Sort by date</option>
+                <option value="votes">Sort by votes</option>
+            </select>
+        </form>
+    </div>
+
+    {% for post in posts %}
+        <div class="card post">
+            <div class="card-body card-post">
+                <div class="card-vote">
+                    {{ post.getVotes() }}
+                </div>
+                <div class="post-content">
+                    <div class="post-header">
+                        <p class="post-title">{{ post.getTitle() }} <small><i class="opacity">{{ post.getPostAge() }}</i></small></p>
+                        
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <a class="t-d-none post-delete" href="{{ path('delete', {id: post.id, token: csrf_token('delete_post' ~ post.id)}) }}">
+                                    <i class="fas fa-trash-alt"></i>
+                            </a>
+                        {% endif %}
+                        
+                    </div>
+                    <a class="post-msg" href="{{ post.getUrl() }}">{{ post.getMessage() }} 
+                        {% if post.getSourceUrl(post.getUrl()) != "" %}
+                            <small><i class="opacity">({{ post.getSourceUrl(post.getUrl()) }})</i></small>
+                        {% endif %}
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
+
+
+{% block javascripts %}
+    <script>
+        window.onload = function() {
+            let params = (new URL(document.location)).searchParams;
+            let sort = params.get("sort") ?? "date";
+            console.log(sort);
+            select = document.getElementById("sort");
+            select.value = sort;
+        }
+    </script>
+{% endblock %}

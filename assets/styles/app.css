@@ -1,3 +1,71 @@
 body {
     background-color: lightgray;
 }
+.navbar-user {
+    display: flex;
+    align-items: flex-end;
+}
+.login-form, .register-form {
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5%;
+}
+.login-btn, .register-btn, .btn {
+    margin-top: 10px;
+}
+.post {
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 5px;
+}
+.card-post {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding-right: 5%;
+}
+.card-vote {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 10px;
+}
+.post-msg {
+    width: inherit;
+    text-decoration: none;
+    color: initial;
+    font-size: smaller;
+}
+.post-msg:hover {
+    color: initial;
+}
+.post-content {
+    width: 100%;
+}
+.post-title {
+    margin-bottom: 5px;
+}
+.opacity {
+    opacity: 0.5;
+}
+.post-sort {
+    margin-left: 10px;
+}
+.post-new {
+    margin-right: 10px;
+}
+.post-btn{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.post-delete {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+}
+.post-votes {
+    margin: 0 !important;
+}

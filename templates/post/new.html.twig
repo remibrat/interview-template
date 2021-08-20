@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New post{% endblock %}
+
+{% block body %}
+    <div class="card register-form">
+        <div class="card-body text-center">
+            <h1 class="h3 mb-3 font-weight-normal">New post</h1>
+
+            {{ form_start(form, {'attr': {'class': 'w-100'}}) }}
+                {{ form_errors(form) }}
+                <small><i class="opacity">URL can be blank</i></small>
+                {{ form_row(form.title, {'attr': {'class': 'form-control'}}) }}
+                {{ form_row(form.url, {'attr': {'class': 'form-control'}}) }}
+                {{ form_row(form.message, {'attr': {'class': 'form-control'}}) }}
+                
+                <br>
+
+                <div class="form-group">
+                    <div>
+                        <input type="submit" class="btn btn-primary" value="create">
+                    </div>
+                </div>
+            </div>
+        </div>
+    {{ form_end(form) }}
+{% endblock %}

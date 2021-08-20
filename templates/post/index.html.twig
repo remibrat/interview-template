@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello PostController!{% endblock %}
+
+{% block body %}
+    <div class="post-btn">
+        <form action="{{ path('posts') }}" method="get" class="post-sort mt-3 mb-1">
+            <select name="sort" id="sort" class="browser-default form-control" onchange="this.form.submit()">
+                <option value="date">Sort by date</option>
+                <option value="votes">Sort by votes</option>
+            </select>
+        </form>
+        <a href="{{ path('new') }}" class="btn btn-primary post-new">New post</a>
+    </div>
+
+    {% for post in posts %}
+        <div class="card post">
+            <div class="card-body card-post">
+                <div class="card-vote">
+                    {% if userVoteRepository.userVoted(app.user, post, 1) == false %}
+                        <div>
+                            <a href="{{ path('vote', {id: post.id, value: 'up', token: csrf_token('vote_post' ~ post.id)}) }}"><i class="fa fa-caret-up fa-2x upvote"></i></a>
+                        </div>
+                    {% endif %}
+                    <p class="post-votes">{{ post.getVotes() }}</p>
+                    {% if userVoteRepository.userVoted(app.user, post, -1) == false %}
+                        <div>
+                            <a href="{{ path('vote', {id: post.id, value: 'down', token: csrf_token('vote_post' ~ post.id)}) }}" target="_blank"><i class="fa fa-caret-down fa-2x downvote"></i></a>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="post-content">
+                    <div class="post-header">
+                        <p class="post-title">{{ post.getTitle() }} <small><i class="opacity">{{ post.getPostAge() }}</i></small></p>
+                    </div>
+                    <a class="post-msg" href="{{ post.getUrl() }}">{{ post.getMessage() }} 
+                        {% if post.getSourceUrl(post.getUrl()) != "" %}
+                            <small><i class="opacity">({{ post.getSourceUrl(post.getUrl()) }})</i></small>
+                        {% endif %}
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
+
+
+{% block javascripts %}
+    <script>
+        window.onload = function() {
+            let params = (new URL(document.location)).searchParams;
+            let sort = params.get("sort") ?? "date";
+
+            select = document.getElementById("sort");
+            select.value = sort;
+        }
+    </script>
+{% endblock %}
