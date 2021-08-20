@@ -17,13 +17,17 @@
         <div class="card post">
             <div class="card-body card-post">
                 <div class="card-vote">
-                    <div>
-                        <a href="#"><i class="fa fa-caret-up fa-2x"></i></a>
-                    </div>
-                    {{ post.getVotes() }}
-                    <div>
-                        <a href="#"><i class="fa fa-caret-down fa-2x"></i></a>
-                    </div>
+                    {% if userVoteRepository.userVoted(app.user, post, 1) == false %}
+                        <div>
+                            <a href="{{ path('vote', {id: post.id, value: 'up', token: csrf_token('vote_post' ~ post.id)}) }}"><i class="fa fa-caret-up fa-2x upvote"></i></a>
+                        </div>
+                    {% endif %}
+                    <p class="post-votes">{{ post.getVotes() }}</p>
+                    {% if userVoteRepository.userVoted(app.user, post, -1) == false %}
+                        <div>
+                            <a href="{{ path('vote', {id: post.id, value: 'down', token: csrf_token('vote_post' ~ post.id)}) }}"><i class="fa fa-caret-down fa-2x downvote"></i></a>
+                        </div>
+                    {% endif %}
                 </div>
                 <div class="post-content">
                     <div class="post-header">
@@ -49,7 +53,7 @@
         window.onload = function() {
             let params = (new URL(document.location)).searchParams;
             let sort = params.get("sort") ?? "date";
-            console.log(sort);
+
             select = document.getElementById("sort");
             select.value = sort;
         }
