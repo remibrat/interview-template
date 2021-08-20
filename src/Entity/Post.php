@@ -130,10 +130,14 @@ class Post
         return $this;
     }
 
-    public function getSourceUrl(string $url): string
+    public function getSourceUrl($url): string
     {
-        preg_match('@^(http[s]?:\/\/)?([^\/\s]+)(.*)@i', $this->getUrl(), $matches);
-        return $matches[2];
+        if (!is_null($url)) {
+            preg_match('@^(http[s]?:\/\/)?([^\/\s]+)(.*)@i', $this->getUrl(), $matches);
+            return $matches[2];
+        } else {
+            return "";
+        }
     }
 
     public function getMessage(): ?string

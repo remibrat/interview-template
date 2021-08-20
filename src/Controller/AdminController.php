@@ -2,6 +2,9 @@
 
 namespace App\Controller;
 
+use Exception;
+use App\Entity\Post;
+use App\Entity\UserVote;
 use App\Repository\PostRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,13 +23,43 @@ class AdminController extends AbstractController
         $sort = $request->query->get('sort') ?? "date";
 
         if ($sort == "votes") {
-            $posts = $postRepository->findBy([], ['votes' => 'DESC']);
+            $posts = $postRepository->findAll();
+            usort($posts, function($post1, $post2) {
+                $userVotes1 = $post1->getUserVotes();
+                $userVotes2 = $post2->getUserVotes();
+
+                $totalVotes1 = $post1->getVotes();
+                $totalVotes2 = $post2->getVotes();
+                
+                if ($totalVotes1 == $totalVotes2) {
+                    return 0;
+                }
+                return ($totalVotes1 < $totalVotes2) ? -1 : 1;
+            });
+            $posts = array_reverse($posts);
         } else {
             $posts = $postRepository->findBy([], ['created_at' => 'DESC']);
         }
 
-        return $this->render('post/index.html.twig', [
-            'posts' => $posts,
+        return $this->render('admin/index.html.twig', [
+            'posts' => $posts
         ]);
+    }
+
+    /**
+     * @Route("/delete/{id}/{token}", name="delete", methods={"GET"})
+     * @IsGranted("ROLE_ADMIN")
+     */
+    public function delete(Post $post, $token)
+    {
+        if (!$this->isCsrfTokenValid('delete_post' . $post->getId(), $token)) {
+            throw new Exception('Invalid CSRF Token');
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($post);
+        $em->flush();
+
+        return $this->redirectToRoute('posts');
     }
 }
