@@ -25,7 +25,7 @@
                     <p class="post-votes">{{ post.getVotes() }}</p>
                     {% if userVoteRepository.userVoted(app.user, post, -1) == false %}
                         <div>
-                            <a href="{{ path('vote', {id: post.id, value: 'down', token: csrf_token('vote_post' ~ post.id)}) }}"><i class="fa fa-caret-down fa-2x downvote"></i></a>
+                            <a href="{{ path('vote', {id: post.id, value: 'down', token: csrf_token('vote_post' ~ post.id)}) }}" target="_blank"><i class="fa fa-caret-down fa-2x downvote"></i></a>
                         </div>
                     {% endif %}
                 </div>
