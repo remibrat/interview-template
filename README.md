@@ -30,7 +30,7 @@ You can now access your website on https://127.0.0.1:8000.
 
 ## Connection
 
-Run this command in the terminal.
+Run these commands in the terminal.
 
 - `php bin/console make:migration`
 - `php bin/console d:s:u --force`
